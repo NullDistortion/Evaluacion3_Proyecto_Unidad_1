@@ -1,0 +1,97 @@
+CREATE DATABASE tienda_instrumentos;
+
+USE tienda_instrumentos;
+
+CREATE TABLE Marca (
+    id_marca INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Proveedor (
+    id_prov INT PRIMARY KEY AUTO_INCREMENT,
+    telefono VARCHAR(20),
+    cantidad INT
+);
+
+CREATE TABLE Instrumento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipo enum ('acustica', 'electrica', 'activo', 'pasivo'),
+    costo DECIMAL(10,2),
+    pastilla VARCHAR(50),
+    id_marca INT,
+    id_prov INT,
+    FOREIGN KEY (id_marca) REFERENCES Marca(id_marca),
+    FOREIGN KEY (id_prov) REFERENCES Proveedor(id_prov)
+);
+
+-- Subtipos de Instrumento
+CREATE TABLE Guitarra (
+    id INT PRIMARY KEY,
+    FOREIGN KEY (id) REFERENCES Instrumento(id)
+);
+
+CREATE TABLE Bajo (
+    id INT PRIMARY KEY,
+    FOREIGN KEY (id) REFERENCES Instrumento(id)
+);
+
+CREATE TABLE Cliente (
+    cedula VARCHAR(20) PRIMARY KEY,
+    nombre VARCHAR(50),
+    apellido VARCHAR(50),
+    correo VARCHAR(100),
+    telefono VARCHAR(20)
+);
+
+
+CREATE TABLE Compra (
+    id_compra INT PRIMARY KEY AUTO_INCREMENT,
+    cedula_cliente VARCHAR(20),
+    id_instrumento INT,
+    fecha_compra DATE,
+    FOREIGN KEY (cedula_cliente) REFERENCES Cliente(cedula),
+    FOREIGN KEY (id_instrumento) REFERENCES Instrumento(id)
+);
+
+
+INSERT INTO Marca (nombre)
+VALUES ('Fender'),
+       ('Gibson'),
+       ('Ibanez'),
+       ('Yamaha'),
+       ('Cort');
+
+
+INSERT INTO Proveedor (telefono, cantidad)
+VALUES ('0998765432', 50),
+       ('0987654321', 100),
+       ('0976543210', 75);
+
+
+INSERT INTO Instrumento (tipo, costo, pastilla, id_marca, id_prov)
+VALUES 
+('electrica', 850.00, 'Humbucker', 1, 1),   
+('activo', 920.00, 'Single Coil', 2, 1),    
+('acustica', 400.00, NULL, 4, 2),           
+('pasivo', 500.00, NULL, 5, 2),             
+('electrica', 1200.00, 'Single Coil', 3, 3);
+
+INSERT INTO Guitarra (id) VALUES (1), (3), (5);
+INSERT INTO Bajo (id) VALUES (2), (4);
+
+
+INSERT INTO Cliente (cedula, nombre, apellido, correo, telefono)
+VALUES 
+('1100110011', 'Camila', 'Poma', 'camila@example.com', '0987654321'),
+('1100220022', 'Juan', 'Pérez', 'juanp@example.com', '0998765432'),
+('1100330033', 'Lucía', 'Martínez', 'lucia@example.com', '0976543210'),
+('1100440044', 'Andrés', 'López', 'andres@example.com', '0965432109');
+
+
+INSERT INTO Compra (cedula_cliente, id_instrumento, fecha_compra)
+VALUES
+('1100110011', 1, '2025-01-10'), 
+('1100220022', 2, '2025-02-15'), 
+('1100330033', 3, '2025-03-05'), 
+('1100110011', 5, '2025-03-18'), 
+('1100440044', 4, '2025-04-12');
