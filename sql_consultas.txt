@@ -1,0 +1,39 @@
+
+CREATE VIEW view_consulta1 AS
+SELECT c.nombre, c.apellido, com.fecha_compra
+FROM Cliente c
+JOIN Compra com ON c.cedula = com.cedula_cliente;
+
+CREATE VIEW view_consulta2 as 
+SELECT i.id, i.tipo, i.costo, m.nombre
+FROM Instrumento i
+JOIN Marca m ON i.id_marca = m.id_marca;
+
+CREATE VIEW view_consulta3 as 
+SELECT i.id, i.tipo, p.telefono
+FROM Guitarra g
+JOIN Instrumento i ON g.id = i.id
+JOIN Proveedor p ON i.id_prov = p.id_prov
+WHERE i.pastilla = 'Single Coil';
+
+CREATE VIEW view_consulta4 as 
+SELECT c.nombre, c.apellido, c.cedula, i.tipo
+FROM Cliente c
+JOIN Instrumento i
+WHERE c.nombre = 'Camila' AND i.costo < 500;
+
+CREATE VIEW view_consulta5 as 
+SELECT tipo, pastilla, id_prov,
+       (SELECT telefono FROM Proveedor p WHERE p.id_prov = i.id_prov) AS telefono
+FROM Instrumento i
+WHERE id_prov = 2;
+
+select * from view_consulta1; 
+
+select * from view_consulta2; 
+
+select * from view_consulta3; 
+
+select * from view_consulta4; 
+
+select * from view_consulta5;
